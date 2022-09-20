@@ -1,0 +1,35 @@
+{% extends 'website/blog.html' %}
+{% load static %}
+
+{% block content %}
+    {% for post in draft_post %}
+        <div class="col-lg-6">
+            <div class="blog-post">
+                <div class="blog-thumb">
+                    <img class="img-fluid" src="{{ post.image.url }}" alt="">
+                </div>
+                <div class="down-content">
+                    <span>{{post.category}}</span>
+                    <a href="{% url 'details' post.slug %}"><h4>{{post.title}}</h4></a>
+                    <ul class="post-info">
+                    <li><a href="#">Admin</a></li>
+                    <li><a href="#">{{post.created_on}}</a></li>  
+                    </ul>
+                    <p> {{ post.sub_article }}...<br>
+                    <a href="{% url 'details' post.slug %}">&rarr; Read more</a></p>
+                    <div class="post-options">
+                    <div class="row">
+                        <div class="col-lg-12">
+                        <ul class="post-tags">
+                            <li><i class="fa fa-tags"></i></li>
+                            <li><a href="#">Best Templates</a>,</li>
+                            <li><a href="#">TemplateMo</a></li>
+                        </ul>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
