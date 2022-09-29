@@ -4,14 +4,18 @@ from .forms import newsletter, contactForm, newsletterForm
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
+import random
 
 
 # Create your views here.
 
 def index(request):
-
-    posts = post.objects.all().order_by('-created_on').filter(status=1)[:5]
+    #get the posts with a status of published and make it a list
+    posts = list(post.objects.all().filter(status=1))
+    #sidebar posts
     sidebar = post.objects.all().order_by('-created_on')[:6]
+
+    posts = random.sample(posts, 5)#select 5 random posts from that posts list
 
     context = {
         'posts':posts,
@@ -21,29 +25,43 @@ def index(request):
     return render(request, 'website/index.html', context)
 
 def about(request):
+    #suscribe form on the about page
     suscribe_form = newsletterForm()
     return render(request, 'website/about.html', {'form':suscribe_form})
 
 def blog(request):
-    posts = post.objects.all().order_by('-created_on').filter(status=1)
-    sidebar_posts = posts[:6]
-    suscribe_form = newsletterForm()
-    search_value = request.GET.get('q')
-    
-    if search_value != None:
-        posts = post.objects.all().order_by('-created_on').filter(status=1, tags__name=search_value)
-        
- # In order to use the paginator we have to set the paginator to the object post and 
-    # use paginator on the page
-    paginator = Paginator(posts, 8)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    #get the posts with a status of published and make it a list
+    posts = list(post.objects.all().filter(status=1))
 
-    context = {
-        'sidebar':sidebar_posts,
-        'posts': page_obj
-    }
-    return render(request, 'website/blog.html', context)
+    #get sidebar posts by latest
+    sidebar_posts = post.objects.all().order_by('-created_on')[:6]
+    searchTerm = request.GET.get('q')
+    
+    if searchTerm != None:
+        posts = post.objects.all().order_by('-created_on').filter(status=1, tags__name=searchTerm)
+
+        #Return a 404 page if the search term is not found
+        if posts.count()==0:
+            context = {
+                'sidebar':sidebar_posts,
+            }
+            return render(request, 'website/404.html', context)
+    else:   
+        #randomize the posts
+        posts = random.sample(posts, 8)
+
+        # In order to use the paginator we have to set the paginator to the object post and 
+        # use paginator on the page
+        paginator = Paginator(posts, 8)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context = {
+            'sidebar':sidebar_posts,
+            'posts': page_obj
+        }
+        return render(request, 'website/blog.html', context)
+
     
 def contacts(request):
 

@@ -67,6 +67,7 @@ https://templatemo.com/tm-551-stand-blog
           <div class="col-lg-8">
             <div class="all-blog-posts">
               <div class="row">
+
                 
                 {% for post in posts%}
                   <div class="col-lg-12">
@@ -103,8 +104,9 @@ https://templatemo.com/tm-551-stand-blog
                       </div>
                     </div>
                   </div>
+                  {{post.article.as_p|safe}}
                   {% endfor %}
-
+                  
                 <div class="col-lg-12">
                   <div class="main-button">
                     <a href="{% url 'blog' %}">View All Posts</a>
