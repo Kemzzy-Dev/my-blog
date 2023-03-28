@@ -34,16 +34,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    
+
+    #jazzmin to style the admin panel
+    'jazzmin',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     #3rd party apps
-    #jazzmin to style the admin panel
-    'jazzmin',
     'ckeditor',
     'ckeditor_uploader',
     
