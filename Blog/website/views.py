@@ -15,10 +15,13 @@ def index(request):
     #sidebar posts
     sidebar = post.objects.all().order_by('-created_on')[:6]
 
-    posts = random.sample(posts, 5)#select 5 random posts from that posts list
+    # posts = random.sample(posts, 5)#select 5 random posts from that posts list
+    paginator = Paginator(posts, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'posts':posts,
+        'posts':page_obj,
         'sidebar':sidebar,
     }
 
